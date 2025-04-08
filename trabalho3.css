@@ -1,0 +1,23 @@
+body {
+    padding: 10px 30px;
+    font-family: Arial;
+}
+
+.grafo-content {
+    border: 1px solid #ccc;
+    display: flex;
+    justify-content: flex-start;
+    align-items: end;
+    gap: 20px;
+  }
+  
+  .grafo {
+    width: 70%;
+    height: 600px;
+    
+  }
+  
+  .legenda {
+    width: 25%;
+  }
+  

@@ -1,0 +1,84 @@
+# Visualizador de Grafos com Grupos Desconectados
+
+Este projeto permite visualizar grafos com agrupamentos de vértices que **não possuem ligações entre si**, utilizando a biblioteca [vis-network](https://visjs.github.io/vis-network/). Cada grupo é representado por uma cor diferente.
+
+## 📦 Estrutura da Classe `IndexedListGraph`
+
+A classe `IndexedListGraph` representa um grafo com métodos que ajudam na sua análise e visualização.
+
+### `constructor(data)`
+Recebe um objeto JSON onde cada chave é um vértice e o valor é uma lista de vértices conectados a ele.
+
+```js
+const grafo = {
+  A: ["B", "C"],
+  B: ["A"],
+  C: ["A"],
+  D: [],
+};
+```
+
+### `getConnections(v)`
+Retorna os vizinhos (ligações diretas) do vértice `v`.
+
+### `getDegree(v)`
+Retorna o grau (quantidade de conexões) do vértice `v`.
+
+### `getSortedVertexes()`
+Retorna os vértices ordenados de forma decrescente com base no grau.
+
+### `groupUnconnectedVerticies()`
+Agrupa os vértices em grupos que **não têm ligações entre si**. Cada grupo pode ser interpretado como uma "cor" para colorir o grafo.
+
+```js
+for (const vert of this.getSortedVertexes()) {
+  let added = false;
+  const conns = this.getConnections(vert);
+
+  for (const group of groups) {
+    const hasConnection = group.some((vert2) => conns.includes(vert2));
+    if (!hasConnection && !added) {
+      group.push(vert);
+      added = true;
+    }
+  }
+
+  if (!added) groups.push([vert]);
+}
+```
+
+## 🧠 Explicação do Algoritmo de Agrupamento
+
+1. Ordenamos os vértices pelo grau (mais conexões primeiro).
+2. Para cada vértice:
+   - Verificamos se ele pode entrar em algum grupo **sem estar ligado a nenhum membro do grupo**.
+   - Se puder, adicionamos.
+   - Se não puder, criamos um novo grupo só pra ele.
+
+## 🖼️ Visualização com `vis-network`
+
+### `DataSet`
+É usada para criar os dados de nós que serão passados para a `Network`. Cada nó tem um `id`, `label` e `color`.
+
+### `Network`
+Cria a visualização do grafo dentro de um `div`. Os parâmetros permitem configurar a física, interação, aparência dos nós e arestas.
+
+```js
+new Network(container, { nodes, edges }, {
+  interaction: {
+    zoomView: false,
+    dragView: true
+  }
+});
+```
+
+## 🧩 Estilos e Layout
+
+Para que o layout não fique bugado, certifique-se de definir `width` e `height` fixos nos elementos de grafo (`div#grafX`). Exemplo:
+
+```css
+.grafo {
+  width: 100%;
+  height: 600px;
+}
+```

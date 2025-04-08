@@ -1,0 +1,37 @@
+O código começa por definir uma classe que será usada para declarar os nossos grafos. Ela contém os métodos que serão
+necessários para distribuirmos os nós dos grafos em grupos e assim resolver problemas que envolvem os grafos.
+
+Em getConnection(), o método recebe um nó e então vai resgatar os vizinhos desses nós, que serão os valores atribuídos à
+chave do nó respectivo.
+
+getDegree() vai calcular o grau do nó, usando length na lista de vizinhos do nó
+
+getSortedVertexes() irá ordernar os nós em ordem decrescente. Isso é mais útil em algoritmos de coloração
+de grafos pois sempre queremos começar pelos que tem mais graus.
+
+groupUnconnectedVerticies():
+    iremos juntar os nós que não possuem ligação dentro de um grupo. Por exemplo, se tivermos os nós A e B
+    e eles são ligados, significará que estes não poderão estar dentro de um mesmo grupo, ou seja, sempre estarão
+    separados. Mas se pegarmos um nó C que não possui ligação nenhuma com A, poderemos colocar estes dois dentro
+    de um grupo. Isso é uma forma diferente de colorir um grafo, onde cada grupo poderá ser interpretado como uma cor.
+
+    'for (const vert of this.getSortedVertexes()) {...}' , aqui, o programa percorre uma lista de nós ordenados de forma
+    decrescente. Em seguida criamos um boolean e conexões do vértice que está sendo iterado (vert)
+
+    'for (const group of groups) {...}' iremos iterar por cada grupo que já foi criado até agora. Ele serve para descobrirmos
+    se o vértice atual (vert) se encaixa em algum grupo
+
+    Depois, usamos '.some'. Ele nos ajudará a dizer se algum dos nós que está no grupo, fazem ligação com o nó atual (vert).
+    Essa linha irá retornar um valor booleano, e se for verdadeiro, ou seja, o nó atual possui vizinhos no grupo iterado, ele não
+    vai ser adicionado nesse grupo, pois ele tem um vizinho lá.
+
+    O primeiro 'if' é apenas uma verificação para termos certeza de que podemos adicionar o vértice aqui. Caso ele tenha ligações com um
+    vértice do grupo, e não tenha sido adicionado ainda, ele poderá ser adicionado no grupo com tranquilidade.
+
+    O segundo 'if' irá ser verdadeiro caso o vértice iterado tenha passado por todos os grupos presentes e não tenha sido adicionado
+    em nenhum deles. Assim, ele cria um grupo novo e adiciona este vértice no grupo novo, que já passa a valer no segundo for que fizemos
+
+    Por fim, o método retorna 'groups', que é basicamente, um array de arrays, e cada array representa uma cor (nós que não possuem qualquer relação).
+
+O resto do código é para as bibliotecas Dataset e Network. Dataset irá criar um dataset de nós contendo id, label e cor de cada nó.
+Já a Network se responsabiliza pela visualização do(s) grafo(s).
